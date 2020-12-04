@@ -4,25 +4,19 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
-import javax.swing.*;
-import java.io.FileNotFoundException;
 
 public class Main extends Application  {
     public static TileButton buttons[][] = new TileButton[10][10];
     static Algorithm algorithm;
     static HBox hbox;
-    public static void main (String[] args) throws FileNotFoundException {
+    public static void main (String[] args){
             algorithm = new Algorithm();
             launch(args);
             algorithm.startAlgorithm();
@@ -31,7 +25,7 @@ public class Main extends Application  {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage){
         primaryStage.setTitle("Path Finding");
 
 
@@ -50,28 +44,28 @@ public class Main extends Application  {
 
             for(int j=0;j<10;j++)
             {
-                TileButton tileButton = new TileButton(algorithm.plansza.Data[j][i]);
+                TileButton tileButton = new TileButton(algorithm.board.Data[j][i]);
                 tileButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
                     if(algorithm.phase==0 && tileButton.tileType==TileType.ALLOWED)
                     {
                         algorithm.phase=1;
-                        algorithm.setS(algorithm.plansza,tileButton.y,tileButton.x);
-                        tileButton.tileType=TileType.START;
+                        algorithm.setS(algorithm.board,tileButton.y,tileButton.x);
+                        tileButton.tileType=TileType.STARTING_POINT;
                         tileButton.setStyle("-fx-background-color: #fc2b1c");
 
                     }else if(algorithm.phase==1 && tileButton.tileType==TileType.ALLOWED)
                     {
                         algorithm.phase=2;
-                        algorithm.setK(algorithm.plansza,tileButton.y,tileButton.x);
-                        tileButton.tileType=TileType.KONIEC;
+                        algorithm.setK(algorithm.board,tileButton.y,tileButton.x);
+                        tileButton.tileType=TileType.ENDING_POINT;
                         tileButton.setStyle("-fx-background-color: #3918f2");
                         for(int k=0;k<10;k++)
                         {
                             for(int l=0;l<10;l++)
                             {
-                                if(algorithm.plansza.Data[k][l].typ==TileType.VISITED)
+                                if(algorithm.board.Data[k][l].type==TileType.VISITED)
                                 {
                                     System.out.println("V");
                                     buttons[l][k].tileType=TileType.VISITED;
@@ -136,12 +130,12 @@ public class Main extends Application  {
             @Override
             public void handle(ActionEvent event) {
                 algorithm.phase=0;
-                algorithm.plansza=new Plansza();
+                algorithm.board=new Board();
                 for(int k=0;k<10;k++)
                 {
                     for(int l=0;l<10;l++)
                     {
-                            buttons[l][k].tileType=algorithm.plansza.Data[k][l].typ;
+                            buttons[l][k].tileType=algorithm.board.Data[k][l].type;
                             buttons[l][k].setColor();
                         }
                     }
@@ -193,7 +187,7 @@ public class Main extends Application  {
         );
 
         Label label21 = createColorLabel();
-        label21.setStyle("-fx-background-color: #6e0c19");
+        label21.setStyle("-fx-background-color: #b3b3b3");
         Label label22 = createLegendLabel("Pole niedostępne");
         HBox second = new HBox();
         second.setStyle("-fx-border-style: solid inside;" +

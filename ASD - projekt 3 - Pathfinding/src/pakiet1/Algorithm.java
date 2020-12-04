@@ -3,25 +3,24 @@ package pakiet1;
 import java.util.Scanner;
 public class Algorithm {
     public int phase=0;
-    public Plansza plansza;
+    public Board board;
     static int x;
     static int y;
     Algorithm()
     {
-        plansza =new Plansza();
+        board =new Board();
     }
 
     public void startAlgorithm()
     {
-        plansza.show();
+        board.show();
     }
-    public void startPathFinding()
-    {
-        setS(plansza);
+    public void startPathFinding() {
+        setS(board);
         System.out.println();
-        setK(plansza);
+        setK(board);
     }
-    public void setS( Plansza plansza)
+    public void setS( Board board)
     {
         System.out.println("Wprowadz wspolrzedne punktu startowego rozdzielone przecinkiem");
         enterValue(x,y);
@@ -29,38 +28,40 @@ public class Algorithm {
         setStarter(x,y);
 
     }
-    public void setS( Plansza plansza, int x, int y)
+    public void setS( Board board, int x, int y)
     {
-        plansza.Data[y][x].setStatus("S");
-        plansza.STARTER=plansza.Data[y][x];
+        board.Data[y][x].setStatus(TileType.STARTING_POINT);
+        board.STARTER=board.Data[y][x];
     }
-    public void setK( Plansza plansza)
+    public void setK( Board board)
     {
-        System.out.println("Wprowadz wspolrzedne punktu koncowego rozdzielone przecinkiem");
         enterValue(x,y);
-        System.out.println("XD: "+x+" "+y);
-        if(plansza.Data[y][x].typ==TileType.ALLOWED)
+        if(board.Data[y][x].type==TileType.ALLOWED)
         {
-            plansza.Data[y][x].setStatus("K");
-            plansza.KONIEC=plansza.Data[y][x];
-            plansza.show();
+            board.Data[y][x].setStatus(TileType.ENDING_POINT);
+            board.KONIEC=board.Data[y][x];
+            board.show();
             System.out.println();
-            plansza.KONIEC.setValue(plansza.STARTER);
-            plansza.STARTER.setValues(plansza.STARTER,plansza.KONIEC);
-            plansza.STARTER.setSasiedzi(plansza);
+            board.KONIEC.setValue(board.STARTER);
+            board.STARTER.setValues(board.STARTER,board.KONIEC);
+            board.STARTER.setNeighbours(board);
 
         }else
         {
-            System.out.println("Ten punkt nie moze byc koncem");
+            try {
+                throw new Exception("This element can't be ending point");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-    public void setK( Plansza plansza, int x, int y)
+    public void setK( Board board, int x, int y)
     {
-        plansza.Data[y][x].setStatus("K");
-        plansza.KONIEC=plansza.Data[y][x];
-        plansza.KONIEC.setValue(plansza.STARTER);
-        plansza.STARTER.setValues(plansza.STARTER,plansza.KONIEC);
-        plansza.STARTER.setSasiedzi(plansza);
+        board.Data[y][x].setStatus(TileType.ENDING_POINT);
+        board.KONIEC=board.Data[y][x];
+        board.KONIEC.setValue(board.STARTER);
+        board.STARTER.setValues(board.STARTER,board.KONIEC);
+        board.STARTER.setNeighbours(board);
     }
     public void enterValue(int x, int y)
     {
@@ -69,18 +70,20 @@ public class Algorithm {
         String splitted[] = response.split(",");
         this.x=Integer.parseInt(splitted[0])-1;
         this.y=Integer.parseInt(splitted[1])-1;
-        System.out.println("Wspolrzedne : "+x+" "+y);
-        System.out.println(plansza.Data[y][x].typ);
     }
     public void setStarter(int x, int y)
     {
-        if(plansza.Data[y][x].typ==TileType.ALLOWED)
+        if(board.Data[y][x].type==TileType.ALLOWED)
         {
-            plansza.Data[y][x].setStatus("S");
-            plansza.STARTER=plansza.Data[y][x];
+            board.Data[y][x].setStatus(TileType.STARTING_POINT);
+            board.STARTER=board.Data[y][x];
         }else {
-            System.out.println("Ten punkt nie moze byc startem");
-            setS(plansza);
+            try {
+                throw new Exception("This point cat't be starting point");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            setS(board);
         }
     }
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Plansza {
+class Board {
     List<Tile> openTiles= new ArrayList<>();
  File file = new File("data.txt");
  Tile Data[][]=new Tile[10][10];
@@ -23,8 +23,7 @@ public class Plansza {
          }
      }
  }*/
- Plansza()
- {
+    Board() {
      for(int i=0;i<10;i++)
      {
          for(int j=0;j<10;j++)
@@ -33,7 +32,7 @@ public class Plansza {
          }
      }
  }
-  public void show()
+    public void show()
  {
      for(int i=0;i<10;i++)
      {
@@ -48,27 +47,27 @@ public class Plansza {
  {
      int x=tile.x;
      int y=tile.y;
-     if(x!=0 && Data[x-1][y].typ==TileType.ALLOWED)
+     if(x!=0 && Data[x-1][y].type==TileType.ALLOWED)
      {
-         Data[x-1][y].typ=TileType.OPEN;
+         Data[x-1][y].type=TileType.OPEN;
          Data[x-1][y].parent=tile;
          openTiles.add(Data[x-1][y]);
      }
-     if(x!=9 && Data[x+1][y].typ==TileType.ALLOWED)
+     if(x!=9 && Data[x+1][y].type==TileType.ALLOWED)
      {
-         Data[x+1][y].typ=TileType.OPEN;
+         Data[x+1][y].type=TileType.OPEN;
          Data[x+1][y].parent=tile;
          openTiles.add(Data[x+1][y]);
      }
-     if(y!=0 && Data[x+1][y].typ==TileType.ALLOWED)
+     if(y!=0 && Data[x+1][y].type==TileType.ALLOWED)
      {
-         Data[x][y-1].typ=TileType.OPEN;
+         Data[x][y-1].type=TileType.OPEN;
          Data[x][y-1].parent=tile;
          openTiles.add(Data[x][y-1]);
      }
-     if(y!=9 && Data[x][y+1].typ==TileType.ALLOWED)
+     if(y!=9 && Data[x][y+1].type==TileType.ALLOWED)
      {
-         Data[x][y+1].typ=TileType.OPEN;
+         Data[x][y+1].type=TileType.OPEN;
          Data[x][y+1].parent=tile;
          openTiles.add(Data[x][y+1]);
      }
@@ -92,11 +91,11 @@ public class Plansza {
      {
          for(int j=0;j<10;j++)
          {
-             if(Data[i][j].typ==TileType.KONIEC)
+             if(Data[i][j].type==TileType.ENDING_POINT)
              {
                  this.KONIEC=Data[i][j];
              }
-             if(Data[i][j].typ==TileType.START)
+             if(Data[i][j].type==TileType.STARTING_POINT)
              {
                  this.STARTER=Data[i][j];
              }
