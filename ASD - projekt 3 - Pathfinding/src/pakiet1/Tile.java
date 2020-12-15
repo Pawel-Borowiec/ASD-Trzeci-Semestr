@@ -1,6 +1,5 @@
 package pakiet1;
 
-import javax.naming.ldap.ExtendedRequest;
 import java.util.ArrayList;
 
 public class Tile {
@@ -36,6 +35,7 @@ public class Tile {
                     return " ";
         }
     }
+    // set neighbouring tiles open and choose best option to visit
     public void setNeighbours(Board board) {
         if (x != 0 && condition(board.Data[this.x - 1][this.y])) {
             check(board.Data[this.x - 1][this.y],board);
@@ -59,7 +59,7 @@ public class Tile {
            board.openTiles.get(0).parent = board.Data[this.x][this.y];
            Tile temp = board.openTiles.get(0);
            if (temp.type==TileType.ENDING_POINT) {
-               finalResult(temp,board);
+               finalResult(temp);
            } else {
                if(board.openTiles.size()>=1)
                {
@@ -90,15 +90,12 @@ public class Tile {
             board.openTiles.add(tile);
         }
     }
-    public void finalResult(Tile tile, Board board) {
-        System.out.println();
-        board.show();
+    public void finalResult(Tile tile) {
         showPath(tile);
         for(int i=0;i<PATH.size();i++)
         {
             System.out.print(PATH.get(PATH.size()-1-i)+",");
         }
-        System.out.println();
     }
     public boolean condition( Tile tile)
     {

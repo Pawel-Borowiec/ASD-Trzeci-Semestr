@@ -6,26 +6,16 @@ public class TileButton extends Button {
     TileType tileType;
     int x;
     int y;
-    TileButton()
-    {
-        setProperties();
-    }
-    TileButton(String name) {
-        setProperties();
-        this.setText(name);
-    }
     TileButton(Tile tile){
         this.tileType=tile.type;
         x=tile.x;
         y=tile.y;
         setProperties();
-        this.setText("Hello");
     }
-    public void setProperties(){
+    private void setProperties(){
         this.setMaxSize(96,96);
         this.setPrefSize(96,96);
         this.setMinSize(96,96);
-        this.setText("Tile");
         this.setColor();
     }
     public void setColor(){

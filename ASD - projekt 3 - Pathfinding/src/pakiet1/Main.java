@@ -16,66 +16,49 @@ public class Main extends Application  {
     public static TileButton buttons[][] = new TileButton[10][10];
     static Algorithm algorithm;
     static HBox hbox;
-    public static void main (String[] args){
+    public static void main (String[] args) {
             algorithm = new Algorithm();
             launch(args);
-            algorithm.startAlgorithm();
             algorithm.startPathFinding();
-
     }
-
     @Override
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("Path Finding");
-
-
         hbox = new HBox();
         hbox.getChildren().addAll(getButtons(),getOptionsPanel());
-
         Scene scene = new Scene(hbox, 1300, 960);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    public GridPane getButtons()
-    {
+    public GridPane getButtons() {
         GridPane gridPane = new GridPane();
-        for(int i=0;i<10;i++)
-        {
+        for(int i=0;i<10;i++) {
 
-            for(int j=0;j<10;j++)
-            {
+            for(int j=0;j<10;j++) {
                 TileButton tileButton = new TileButton(algorithm.board.Data[j][i]);
                 tileButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                    if(algorithm.phase==0 && tileButton.tileType==TileType.ALLOWED)
-                    {
+                    if(algorithm.phase==0 && tileButton.tileType==TileType.ALLOWED) {
                         algorithm.phase=1;
                         algorithm.setS(algorithm.board,tileButton.y,tileButton.x);
                         tileButton.tileType=TileType.STARTING_POINT;
                         tileButton.setStyle("-fx-background-color: #fc2b1c");
 
-                    }else if(algorithm.phase==1 && tileButton.tileType==TileType.ALLOWED)
-                    {
-                        algorithm.phase=2;
-                        algorithm.setK(algorithm.board,tileButton.y,tileButton.x);
-                        tileButton.tileType=TileType.ENDING_POINT;
-                        tileButton.setStyle("-fx-background-color: #3918f2");
-                        for(int k=0;k<10;k++)
-                        {
-                            for(int l=0;l<10;l++)
-                            {
-                                if(algorithm.board.Data[k][l].type==TileType.VISITED)
-                                {
-                                    System.out.println("V");
-                                    buttons[l][k].tileType=TileType.VISITED;
-                                    buttons[l][k].setColor();
+                    }else if(algorithm.phase==1 && tileButton.tileType==TileType.ALLOWED) {
+                            algorithm.phase=2;
+                            algorithm.setK(algorithm.board,tileButton.y,tileButton.x);
+                            tileButton.tileType=TileType.ENDING_POINT;
+                            tileButton.setStyle("-fx-background-color: #3918f2");
+                            for(int k=0;k<10;k++) {
+                                for(int l=0;l<10;l++) {
+                                    if(algorithm.board.Data[k][l].type==TileType.VISITED) {
+                                        buttons[l][k].tileType=TileType.VISITED;
+                                        buttons[l][k].setColor();
+                                    }
                                 }
                             }
                         }
-
-                    }
-
                     }
                 });
                 buttons[i][j]=tileButton;
@@ -85,8 +68,8 @@ public class Main extends Application  {
         }
         return gridPane;
     }
-    public VBox getOptionsPanel()
-    {
+    // create a panel with legend and neccesary buttons
+    public VBox getOptionsPanel() {
         VBox vBox = new VBox();
         vBox.setPrefSize(340,960);
         vBox.setStyle("-fx-padding: 10;" +
@@ -96,39 +79,34 @@ public class Main extends Application  {
                 "-fx-border-radius: 5;" +
                 "-fx-border-color: #ffa3f3"
                 );
-
         VBox temp = new VBox();
         temp.getChildren().add(newPathButton());
         temp.setStyle("-fx-border-style: solid inside;" +
                 "-fx-border-width: 2;"+
                 "-fx-border-color: #ffa3f3"
         );
-        vBox.getChildren().addAll(temp,getLegendaLabel(), createLegend());
+        vBox.getChildren().addAll(temp,getLegendLabel(), createLegend());
         return vBox;
     }
-    public VBox getLegendaLabel()
-    {
-        VBox vBox = new VBox();
-        Label label = new Label("Legenda");
+    public Label getLegendLabel() {
+        Label label = new Label("Legend");
         setPropertiesOfElement(label);
-        label.setStyle("-fx-background-color: #fce144");
         label.setAlignment(Pos.BASELINE_CENTER);
-        vBox.getChildren().add(label);
-        vBox.setStyle("-fx-border-style: solid inside;" +
-                "-fx-border-width: 2;"+
-                "-fx-border-color: #ffa3f3"
+        label.setPrefSize(310,100);
+        label.setStyle("-fx-border-style: solid inside;" +
+                "-fx-border-width: 2;" +
+                "-fx-border-color: #ffa3f3;" +
+                "-fx-background-color: #fce144"
         );
-        return vBox;
+        return label;
     }
-    public Button newPathButton()
-    {
-        Button button = new Button("Wygeneruj nową mapę");
+    // create a button responsible form generation of new map
+    public Button newPathButton() {
+        Button button = new Button("Generate new map");
         setPropertiesOfElement(button);
         button.setStyle("-fx-background-color: #ff6b9b");
         button.setAlignment(Pos.BASELINE_CENTER);
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        button.setOnAction(e ->{
                 algorithm.phase=0;
                 algorithm.board=new Board();
                 for(int k=0;k<10;k++)
@@ -139,18 +117,16 @@ public class Main extends Application  {
                             buttons[l][k].setColor();
                         }
                     }
-                }
-        });
+                });
         return  button;
     }
-    public void setPropertiesOfElement(Labeled labeled)
-    {
+    // set size of certain element
+    public void setPropertiesOfElement(Labeled labeled) {
         labeled.setMaxSize(306,96);
         labeled.setPrefSize(306,96);
         labeled.setMinSize(306,96);
     }
-    public Label createLegendLabel(String text)
-    {
+    public Label createLegendLabel(String text) {
         Label label = new Label();
         set224Size(label);
         label.setAlignment(Pos.BASELINE_CENTER);
@@ -158,14 +134,12 @@ public class Main extends Application  {
         label.setText(text);
         return  label;
     }
-    public void set224Size(Label label)
-    {
+    public void set224Size(Label label) {
         label.setMaxSize(208,96);
         label.setPrefSize(208,96);
         label.setMinSize(208,96);
     }
-    public Label createColorLabel()
-    {
+    public Label createColorLabel() {
         Label label = new Label();
         label.setMaxSize(96,96);
         label.setPrefSize(96,96);
@@ -173,13 +147,13 @@ public class Main extends Application  {
 
         return  label;
     }
-    public VBox createLegend()
-    {
+    // create a sample tiles with certain color
+    public VBox createLegend() {
         VBox vBox =new VBox();
         HBox first = new HBox();
         Label label11 = createColorLabel();
         label11.setStyle("-fx-background-color: #e1f7fa");
-        Label label12 = createLegendLabel("Pole dostępne");
+        Label label12 = createLegendLabel("Avalaible Tile");
         first.getChildren().addAll(label11,label12);
         first.setStyle("-fx-border-style: solid inside;" +
                 "-fx-border-width: 2;"+
@@ -188,7 +162,7 @@ public class Main extends Application  {
 
         Label label21 = createColorLabel();
         label21.setStyle("-fx-background-color: #b3b3b3");
-        Label label22 = createLegendLabel("Pole niedostępne");
+        Label label22 = createLegendLabel("Unavalaible tile");
         HBox second = new HBox();
         second.setStyle("-fx-border-style: solid inside;" +
                 "-fx-border-width: 2;"+
@@ -198,7 +172,7 @@ public class Main extends Application  {
 
         Label label31 = createColorLabel();
         label31.setStyle("-fx-background-color: #14fc5a");
-        Label label32 = createLegendLabel("Pole odwiedzone");
+        Label label32 = createLegendLabel("Visited Tile");
         HBox third = new HBox();
         third.setStyle("-fx-border-style: solid inside;" +
                 "-fx-border-width: 2;"+
@@ -208,7 +182,7 @@ public class Main extends Application  {
 
         Label label41 = createColorLabel();
         label41.setStyle("-fx-background-color: #fc2b1c");
-        Label label42 = createLegendLabel("Poczatek Sciezki");
+        Label label42 = createLegendLabel("Beggining of the path");
         HBox fourth = new HBox();
         fourth.setStyle("-fx-border-style: solid inside;" +
                 "-fx-border-width: 2;"+
@@ -218,7 +192,7 @@ public class Main extends Application  {
 
         Label label51 = createColorLabel();
         label51.setStyle("-fx-background-color: #3918f2");
-        Label label52 = createLegendLabel("Koniec Sciezki");
+        Label label52 = createLegendLabel("End of the path");
         HBox fifth = new HBox();
         fifth.setStyle("-fx-border-style: solid inside;" +
                 "-fx-border-width: 2;"+
@@ -229,5 +203,4 @@ public class Main extends Application  {
         vBox.getChildren().addAll(first,second, third, fourth, fifth);
         return vBox;
     }
-
 }
